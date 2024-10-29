@@ -15,7 +15,6 @@ export default function LoginFrom() {
     const userAccount = await auth.logInAccount({ ...data });
     if (userAccount) {
       const getUser = await auth.getCurrentUser();
-      console.log(getUser);
       if (getUser) {
         dispatch(login(userAccount));
         navigate("/");

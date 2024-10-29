@@ -20,7 +20,7 @@ class Auth {
         name
       );
       if (createdAccount) {
-        this.logInAccount({ email, password });
+        await this.logInAccount({ email, password });
       }
       return createdAccount;
     } catch (error) {

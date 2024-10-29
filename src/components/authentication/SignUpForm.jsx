@@ -15,12 +15,11 @@ export default function SignUpForm() {
     const userAccount = await auth.createAccount({ ...data });
     if (userAccount) {
       const getUser = await auth.getCurrentUser();
-      console.log(getUser);
 
-      dispatch(login(userAccount));
-      navigate("/");
-      // if (getUser) {
-      // }
+      if (getUser) {
+        dispatch(login(userAccount));
+        navigate("/");
+      }
     }
   };
 

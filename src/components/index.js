@@ -7,6 +7,7 @@ import Container from "./reuseableComponents/Container";
 import Input from "./reuseableComponents/Input";
 import Button from "./reuseableComponents/Button";
 import LogoutBtn from "./header/LogoutBtn";
+import Select from "./reuseableComponents/Select";
 
 export {
   SignUpForm,
@@ -18,4 +19,5 @@ export {
   Input,
   Button,
   LogoutBtn,
+  Select,
 };
