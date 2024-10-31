@@ -21,7 +21,7 @@ class Post {
       );
       return createdPost;
     } catch (error) {
-      console.log("appwrite error :: create post error :: " + error);
+      console.log("appwrite error :: create post error :: " + error.message);
       return false;
     }
   }
@@ -35,10 +35,11 @@ class Post {
       );
       return getedPost;
     } catch (error) {
-      console.log("appwrite error :: get post error :: " + error);
+      console.log("appwrite error :: get post error :: " + error.message);
       return false;
     }
   }
+
   async updatePost(post) {
     try {
       const updatedPost = await this.database.updateDocument(
@@ -49,7 +50,7 @@ class Post {
       );
       return updatedPost;
     } catch (error) {
-      console.log("appwrite error :: update post error :: " + error);
+      console.log("appwrite error :: update post error :: " + error.message);
       return false;
     }
   }
@@ -62,7 +63,7 @@ class Post {
       );
       return deletedPost;
     } catch (error) {
-      console.log("appwrite error :: delete post error :: " + error);
+      console.log("appwrite error :: delete post error :: " + error.message);
       return false;
     }
   }
@@ -75,7 +76,7 @@ class Post {
       );
       return getedPosts;
     } catch (error) {
-      console.log("appwrite error :: get posts error :: " + error);
+      console.log("appwrite error :: get posts error :: " + error.message);
       return false;
     }
   }

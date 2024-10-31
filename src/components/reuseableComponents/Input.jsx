@@ -1,8 +1,7 @@
 import React, { forwardRef, useId } from "react";
-import { AiOutlineMail } from "react-icons/ai";
 
 const Input = forwardRef(
-  ({ type = "text", inpClass = "", label, ...props }, ref) => {
+  ({ type = "text", inpClass = "", label, icon = "", ...props }, ref) => {
     const id = useId();
     return (
       <div>
@@ -15,7 +14,7 @@ const Input = forwardRef(
             id={id}
             ref={ref}
           />
-          <AiOutlineMail />
+          {icon}
         </div>
       </div>
     );

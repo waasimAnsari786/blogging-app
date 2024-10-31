@@ -8,6 +8,9 @@ import Input from "./reuseableComponents/Input";
 import Button from "./reuseableComponents/Button";
 import LogoutBtn from "./header/LogoutBtn";
 import Select from "./reuseableComponents/Select";
+import RTE from "./reuseableComponents/RTE";
+import PostForm from "./PostForm/PostForm";
+import AuthProtectedLayout from "./authentication/AuthProtectedLayout";
 
 export {
   SignUpForm,
@@ -20,4 +23,7 @@ export {
   Button,
   LogoutBtn,
   Select,
+  RTE,
+  PostForm,
+  AuthProtectedLayout,
 };

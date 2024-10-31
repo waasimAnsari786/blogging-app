@@ -20,7 +20,7 @@ class File {
       );
       return uploadedFile;
     } catch (error) {
-      console.log("appwrite error :: upload file error :: " + error);
+      console.log("appwrite error :: upload file error :: " + error.message);
       return false;
     }
   }
@@ -33,7 +33,9 @@ class File {
       );
       return getPreviewedFile;
     } catch (error) {
-      console.log("appwrite error :: get previewd file error :: " + error);
+      console.log(
+        "appwrite error :: get previewd file error :: " + error.message
+      );
       return false;
     }
   }
@@ -45,7 +47,7 @@ class File {
       );
       return deletedFile;
     } catch (error) {
-      console.log("appwrite error :: update post error :: " + error);
+      console.log("appwrite error :: update post error :: " + error.message);
       return false;
     }
   }

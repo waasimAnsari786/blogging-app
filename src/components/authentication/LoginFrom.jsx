@@ -5,6 +5,7 @@ import { Container, Input, Button } from "../index";
 import { useForm } from "react-hook-form";
 import auth from "../../appwrrite/authService";
 import { login } from "../../features/authSlice";
+import { AiOutlineMail } from "react-icons/ai";
 
 export default function LoginFrom() {
   const { register, handleSubmit } = useForm();
@@ -38,6 +39,11 @@ export default function LoginFrom() {
             },
           })}
           type="email"
+          icon={
+            <>
+              <AiOutlineMail />
+            </>
+          }
         />
 
         <Input

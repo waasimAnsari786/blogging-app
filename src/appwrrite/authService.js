@@ -24,7 +24,7 @@ class Auth {
       }
       return createdAccount;
     } catch (error) {
-      console.log("appwrite error :: signup error :: " + error);
+      console.log("appwrite error :: signup error :: " + error.message);
       return false;
     }
   }
@@ -37,7 +37,7 @@ class Auth {
       );
       return loggedIn;
     } catch (error) {
-      console.log("appwrite error :: login error :: " + error);
+      console.log("appwrite error :: login error :: " + error.message);
       return false;
     }
   }
@@ -46,7 +46,9 @@ class Auth {
       const getedUser = await this.account.get();
       return getedUser;
     } catch (error) {
-      console.log("appwrite error :: get current user error :: " + error);
+      console.log(
+        "appwrite error :: get current user error :: " + error.message
+      );
       return false;
     }
   }
@@ -55,7 +57,7 @@ class Auth {
       const loggedOut = await this.account.deleteSessions();
       return loggedOut;
     } catch (error) {
-      console.log("appwrite error :: logout error :: " + error);
+      console.log("appwrite error :: logout error :: " + error.message);
       return false;
     }
   }

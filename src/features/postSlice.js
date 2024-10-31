@@ -1,15 +1,46 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import postService from "../appwrrite/postService";
 
-const initialState = [];
+const initialState = {
+  postsArr: [],
+  loading: false,
+  error: null,
+};
+
+export const createPostThunk = createAsyncThunk(
+  "post/createPost",
+  async (postData, { rejectWithValue }) => {
+    try {
+      const createdPost = await postService.createPost(postData);
+      return createdPost;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    postCreated: (state, action) => {},
     postÜpdated: () => {},
     getSinglePost: () => {},
     postdeleted: () => {},
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createPostThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(createPostThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postsArr.shift(action.payload);
+      })
+      .addCase(createPostThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 

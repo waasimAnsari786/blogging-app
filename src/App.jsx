@@ -1,5 +1,11 @@
 import "./index.css";
-import { LoginFrom, MyWeb, SignUpForm } from "./components/index";
+import {
+  LoginFrom,
+  MyWeb,
+  SignUpForm,
+  PostForm,
+  AuthProtectedLayout,
+} from "./components/index";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./store/store";
@@ -12,11 +18,27 @@ function App() {
       children: [
         {
           path: "login",
-          element: <LoginFrom />,
+          element: (
+            <AuthProtectedLayout authentication={false}>
+              <LoginFrom />
+            </AuthProtectedLayout>
+          ),
         },
         {
           path: "signup",
-          element: <SignUpForm />,
+          element: (
+            <AuthProtectedLayout authentication={false}>
+              <SignUpForm />
+            </AuthProtectedLayout>
+          ),
+        },
+        {
+          path: "add-post",
+          element: (
+            <AuthProtectedLayout authentication>
+              <PostForm />
+            </AuthProtectedLayout>
+          ),
         },
       ],
     },

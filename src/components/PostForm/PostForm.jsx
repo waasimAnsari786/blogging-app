@@ -1,21 +1,56 @@
-import React from "react";
-import { Container, Input, Select } from "../index";
+import React, { useCallback, useEffect } from "react";
+import { Button, Container, Input, RTE, Select } from "../index";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { createPostThunk } from "../../features/postSlice";
+import fileService from "../../appwrrite/fileService";
 
 export default function PostForm({ post }) {
-  const { handleSubmit, register, watch, setValue, getValues, control } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        shortDescription: post?.shortDescription || "",
-        longDescription: post?.longDescription || "",
-        slug: post?.slug || "",
-        blogImage: post?.blogImage || "",
-        status: post?.status || "active",
-      },
-    });
+  const { handleSubmit, register, watch, setValue, control } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      shortDescription: post?.shortDes || "",
+      longDescription: post?.longDes || "",
+      slug: post?.slug || "",
+      status: post?.status || "active",
+    },
+  });
 
-  const postSubmit = () => {};
+  const userData = useSelector((state) => state.auth.userData);
+
+  const slugTransform = useCallback(
+    (value) => {
+      let transformedVal = value
+        .trim()
+        .toLowerCase()
+        .replace(/[\s/]+|[\W_]+/g, "-");
+      return transformedVal;
+    },
+    [watch]
+  );
+
+  useEffect(() => {
+    const subscription = watch((value, { name }) => {
+      if (name === "title") {
+        setValue("slug", slugTransform(value.title), { shouldValidate: true });
+      }
+    });
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
+
+  const dispatch = useDispatch();
+
+  const postSubmit = (data) => {
+    const uploadImage = fileService
+      .uploadFile(data.blogImage[0])
+      .then((file) => {
+        data.blogImage = file.$id;
+        dispatch(createPostThunk({ ...data, userId: userData.$id }));
+      })
+      .catch((error) => console.log(error.message));
+  };
 
   return (
     <Container>
@@ -29,7 +64,16 @@ export default function PostForm({ post }) {
           {...register("slug", { required: true })}
           label="slug"
           placeholder="blog slug"
+          readOnly
         />
+
+        <RTE
+          name="shortDescription"
+          label="shortDescription"
+          control={control}
+        />
+        <RTE name="longDescription" label="longDescription" control={control} />
+
         <Input
           {...register("blogImage", { required: true })}
           label="blog image"
@@ -43,6 +87,8 @@ export default function PostForm({ post }) {
           s
           {...register("status", { required: true })}
         />
+
+        <Button myClass="text-white">Submit</Button>
       </form>
     </Container>
   );
