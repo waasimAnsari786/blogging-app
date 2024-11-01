@@ -13,22 +13,34 @@ export default function HomePage() {
     dispatch(getPostsThunk());
   }, []);
 
-  return (
-    <>
-      {authstatus ? (
-        <Container childElemClass="grid grid-cols-3">
-          {postsArr.map((post) => (
-            <PostCard key={post.$id} post={post} />
-          ))}
-        </Container>
-      ) : (
+  if (authstatus) {
+    if (postsArr.length === 0) {
+      return (
         <div className="text-center">
-          <p>Login to read post!</p>
-          <p>
-            Don't have an account? <Link to="/login">Login</Link>
-          </p>
+          <p>No posts are availbale to show</p>
         </div>
-      )}
-    </>
-  );
+      );
+    } else {
+      return (
+        <>
+          <Container childElemClass="grid grid-cols-3">
+            {postsArr.map((post) => (
+              <Link to={`post/${post.$id}`} key={post.$id}>
+                <PostCard post={post} />
+              </Link>
+            ))}
+          </Container>
+        </>
+      );
+    }
+  } else {
+    return (
+      <div className="text-center">
+        <p>Login to read post!</p>
+        <p>
+          Don't have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
+    );
+  }
 }

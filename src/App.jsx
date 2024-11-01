@@ -6,6 +6,7 @@ import {
   PostForm,
   AuthProtectedLayout,
   HomePage,
+  SinglePost,
 } from "./components/index";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -50,6 +51,14 @@ function App() {
           element: (
             <AuthProtectedLayout authentication>
               <HomePage />
+            </AuthProtectedLayout>
+          ),
+        },
+        {
+          path: "post/:slug",
+          element: (
+            <AuthProtectedLayout authentication>
+              <SinglePost />
             </AuthProtectedLayout>
           ),
         },

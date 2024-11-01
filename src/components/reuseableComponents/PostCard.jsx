@@ -23,13 +23,11 @@ export default function PostCard({ myClass = "", post, updatedDate }) {
         alt={`${title}'s image`}
       />
       <MyTypoGraphy myClass="text-3xl">{title}</MyTypoGraphy>
-      <MyTypoGraphy myClass="text-2xl">{parse(shortDescription)}</MyTypoGraphy>
-      <MyTypoGraphy myClass="text-xl">{parse(longDescription)}</MyTypoGraphy>
+      {parse(shortDescription)}
       <MyTypoGraphy myClass="text-xl">Status: {status}</MyTypoGraphy>
       <MyTypoGraphy myClass="text-xl">
         Post Date: {date.toLocaleDateString()} at {date.toLocaleTimeString()}
       </MyTypoGraphy>
-
       {updatedDate && (
         <MyTypoGraphy myClass="text-xl">Update Date: {$updatedAt}</MyTypoGraphy>
       )}

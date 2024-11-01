@@ -14,6 +14,7 @@ import AuthProtectedLayout from "./authentication/AuthProtectedLayout";
 import MyTypoGraphy from "./reuseableComponents/MyTypoGraphy";
 import HomePage from "./pages/HomePage";
 import PostCard from "./reuseableComponents/PostCard";
+import SinglePost from "./pages/SinglePost";
 
 export {
   SignUpForm,
@@ -32,4 +33,5 @@ export {
   MyTypoGraphy,
   HomePage,
   PostCard,
+  SinglePost,
 };
