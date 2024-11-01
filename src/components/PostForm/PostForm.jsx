@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createPostThunk } from "../../features/postSlice";
 import fileService from "../../appwrrite/fileService";
+import { useNavigate } from "react-router-dom";
 
 export default function PostForm({ post }) {
   const { handleSubmit, register, watch, setValue, control } = useForm({
@@ -41,13 +42,19 @@ export default function PostForm({ post }) {
   }, [watch]);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const postSubmit = (data) => {
     const uploadImage = fileService
       .uploadFile(data.blogImage[0])
       .then((file) => {
         data.blogImage = file.$id;
-        dispatch(createPostThunk({ ...data, userId: userData.$id }));
+        dispatch(createPostThunk({ ...data, userId: userData.$id }))
+          .unwrap()
+          .then((createdPost) => {
+            navigate("/");
+          })
+          .catch((error) => console.log(error.message));
       })
       .catch((error) => console.log(error.message));
   };

@@ -56,7 +56,7 @@ class Post {
   }
   async deletePost(slug) {
     try {
-      const deletedPost = await this.account.deleteSessions(
+      const deletedPost = await this.database.deleteDocument(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
         slug
@@ -69,7 +69,7 @@ class Post {
   }
   async getPosts(queries = [Query.notEqual("status", ["inactive"])]) {
     try {
-      const getedPosts = await this.account.deleteSessions(
+      const getedPosts = await this.database.listDocuments(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
         queries

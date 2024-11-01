@@ -5,6 +5,7 @@ import {
   SignUpForm,
   PostForm,
   AuthProtectedLayout,
+  HomePage,
 } from "./components/index";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -16,6 +17,10 @@ function App() {
       path: "/",
       element: <MyWeb />,
       children: [
+        {
+          path: "",
+          element: <HomePage />,
+        },
         {
           path: "login",
           element: (
@@ -37,6 +42,14 @@ function App() {
           element: (
             <AuthProtectedLayout authentication>
               <PostForm />
+            </AuthProtectedLayout>
+          ),
+        },
+        {
+          path: "all-posts",
+          element: (
+            <AuthProtectedLayout authentication>
+              <HomePage />
             </AuthProtectedLayout>
           ),
         },

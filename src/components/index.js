@@ -11,6 +11,9 @@ import Select from "./reuseableComponents/Select";
 import RTE from "./reuseableComponents/RTE";
 import PostForm from "./PostForm/PostForm";
 import AuthProtectedLayout from "./authentication/AuthProtectedLayout";
+import MyTypoGraphy from "./reuseableComponents/MyTypoGraphy";
+import HomePage from "./pages/HomePage";
+import PostCard from "./reuseableComponents/PostCard";
 
 export {
   SignUpForm,
@@ -26,4 +29,7 @@ export {
   RTE,
   PostForm,
   AuthProtectedLayout,
+  MyTypoGraphy,
+  HomePage,
+  PostCard,
 };
