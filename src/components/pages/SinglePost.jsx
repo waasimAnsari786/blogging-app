@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Button, Container, MyTypoGraphy } from "../index";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import file from "../../appwrrite/fileService";
 import parse from "html-react-parser";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { deletePostThunk } from "../../features/postSlice";
 
 export default function SinglePost() {
   const { slug } = useParams();
@@ -18,8 +19,19 @@ export default function SinglePost() {
     }
   }, [slug]);
 
+  const navigate = useNavigate();
   let date = new Date(singlePost ? singlePost.$createdAt : "");
   const isAuthor = singlePost ? singlePost.userId === userData.$id : false;
+
+  const dispatch = useDispatch();
+  const deletePost = () => {
+    dispatch(deletePostThunk(slug))
+      .unwrap()
+      .then((deletedPost) => {
+        navigate("/all-posts");
+      })
+      .catch((error) => console.log(error.message));
+  };
 
   return (
     <Container childElemClass="grid grid-cols-2">
@@ -38,7 +50,9 @@ export default function SinglePost() {
             {isAuthor && (
               <div>
                 <Button myClass="text-white">edit</Button>
-                <Button myClass="text-white">delete</Button>
+                <Button myClass="text-white" onClick={deletePost}>
+                  delete
+                </Button>
               </div>
             )}
           </div>

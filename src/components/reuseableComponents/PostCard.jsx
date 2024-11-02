@@ -7,7 +7,6 @@ export default function PostCard({ myClass = "", post, updatedDate }) {
   const {
     title,
     shortDescription,
-    longDescription,
     status,
     blogImage,
     $createdAt,

@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import postService from "../appwrrite/postService";
-import { useNavigate } from "react-router-dom";
 
 const initialState = {
   postsArr: [],
@@ -35,12 +34,12 @@ export const getPostsThunk = createAsyncThunk(
   }
 );
 
-export const getSinglePostThunk = createAsyncThunk(
-  "post/getSinglePost",
+export const deletePostThunk = createAsyncThunk(
+  "post/deletePost",
   async (slug, { rejectWithValue }) => {
     try {
-      const getedPost = await postService.getPost(slug);
-      return getedPost;
+      const deletedPost = await postService.deletePost(slug);
+      return deletedPost;
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -52,8 +51,6 @@ const postSlice = createSlice({
   initialState,
   reducers: {
     postÜpdated: () => {},
-    getSinglePost: () => {},
-    postdeleted: () => {},
   },
   extraReducers: (builder) => {
     builder
@@ -78,6 +75,17 @@ const postSlice = createSlice({
         state.postsArr = action.payload.documents;
       })
       .addCase(getPostsThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(deletePostThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(deletePostThunk.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(deletePostThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
