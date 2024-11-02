@@ -35,6 +35,18 @@ export const getPostsThunk = createAsyncThunk(
   }
 );
 
+export const getSinglePostThunk = createAsyncThunk(
+  "post/getSinglePost",
+  async (slug, { rejectWithValue }) => {
+    try {
+      const getedPost = await postService.getPost(slug);
+      return getedPost;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 const postSlice = createSlice({
   name: "post",
   initialState,

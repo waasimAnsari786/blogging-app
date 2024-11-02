@@ -52,7 +52,6 @@ export default function PostForm({ post }) {
         dispatch(createPostThunk({ ...data, userId: userData.$id }))
           .unwrap()
           .then((createdPost) => {
-            // console.log(createdPost);
             navigate(
               `/post/${
                 createdPost.documents[createdPost.documents.length - 1].$id
