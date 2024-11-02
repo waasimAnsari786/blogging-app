@@ -52,7 +52,12 @@ export default function PostForm({ post }) {
         dispatch(createPostThunk({ ...data, userId: userData.$id }))
           .unwrap()
           .then((createdPost) => {
-            navigate("/");
+            // console.log(createdPost);
+            navigate(
+              `/post/${
+                createdPost.documents[createdPost.documents.length - 1].$id
+              }`
+            );
           })
           .catch((error) => console.log(error.message));
       })

@@ -62,6 +62,14 @@ function App() {
             </AuthProtectedLayout>
           ),
         },
+        {
+          path: "all-posts/post/:slug",
+          element: (
+            <AuthProtectedLayout authentication>
+              <SinglePost />
+            </AuthProtectedLayout>
+          ),
+        },
       ],
     },
   ]);
