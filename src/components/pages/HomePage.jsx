@@ -25,7 +25,7 @@ export default function HomePage() {
         <>
           <Container childElemClass="grid grid-cols-3">
             {postsArr.map((post) => (
-              <Link to={`post/${post.$id}`} key={post.$id}>
+              <Link to={`/post/${post.$id}`} key={post.$id}>
                 <PostCard post={post} />
               </Link>
             ))}

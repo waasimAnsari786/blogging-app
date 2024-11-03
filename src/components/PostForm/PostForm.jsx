@@ -7,15 +7,16 @@ import fileService from "../../appwrrite/fileService";
 import { useNavigate } from "react-router-dom";
 
 export default function PostForm({ post }) {
-  const { handleSubmit, register, watch, setValue, control } = useForm({
-    defaultValues: {
-      title: post?.title || "",
-      shortDescription: post?.shortDes || "",
-      longDescription: post?.longDes || "",
-      slug: post?.slug || "",
-      status: post?.status || "active",
-    },
-  });
+  const { handleSubmit, register, watch, setValue, control, getValues } =
+    useForm({
+      defaultValues: {
+        title: post?.title || "",
+        shortDescription: post?.shortDescription || "",
+        longDescription: post?.longDescription || "",
+        slug: post?.slug || "",
+        status: "active",
+      },
+    });
 
   const userData = useSelector((state) => state.auth.userData);
 
@@ -24,11 +25,19 @@ export default function PostForm({ post }) {
       let transformedVal = value
         .trim()
         .toLowerCase()
-        .replace(/[\s/]+|[\W_]+/g, "-");
+        .replace(/[\s]+|[\W_]+/g, "-");
       return transformedVal;
     },
     [watch]
   );
+
+  const showImagePreview = useCallback((e) => {
+    const filesLength = e.target.files.length;
+    if (filesLength > 0) {
+      const imagePreview = fileService.getPreviewFile(e.target.files[0]);
+      console.log(imagePreview);
+    }
+  }, []);
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -45,22 +54,25 @@ export default function PostForm({ post }) {
   const navigate = useNavigate();
 
   const postSubmit = (data) => {
-    const uploadImage = fileService
-      .uploadFile(data.blogImage[0])
-      .then((file) => {
-        data.blogImage = file.$id;
-        dispatch(createPostThunk({ ...data, userId: userData.$id }))
-          .unwrap()
-          .then((createdPost) => {
-            navigate(
-              `/post/${
-                createdPost.documents[createdPost.documents.length - 1].$id
-              }`
-            );
-          })
-          .catch((error) => console.log(error.message));
-      })
-      .catch((error) => console.log(error.message));
+    if (post) {
+    } else {
+      const uploadImage = fileService
+        .uploadFile(data.blogImage[0])
+        .then((file) => {
+          data.blogImage = file.$id;
+          dispatch(createPostThunk({ ...data, userId: userData.$id }))
+            .unwrap()
+            .then((createdPost) => {
+              navigate(
+                `/post/${
+                  createdPost.documents[createdPost.documents.length - 1].$id
+                }`
+              );
+            })
+            .catch((error) => console.log(error.message));
+        })
+        .catch((error) => console.log(error.message));
+    }
   };
 
   return (
@@ -82,14 +94,20 @@ export default function PostForm({ post }) {
           name="shortDescription"
           label="shortDescription"
           control={control}
+          defaultValue={getValues("shortDescription")}
         />
-        <RTE name="longDescription" label="longDescription" control={control} />
+        <RTE
+          name="longDescription"
+          label="longDescription"
+          control={control}
+          defaultValue={getValues("longDescription")}
+        />
 
         <Input
           {...register("blogImage", { required: true })}
           label="blog image"
-          placeholder="blog image"
           type="file"
+          onChange={showImagePreview}
         />
 
         <Select

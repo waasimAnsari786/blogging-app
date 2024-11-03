@@ -15,6 +15,7 @@ import MyTypoGraphy from "./reuseableComponents/MyTypoGraphy";
 import HomePage from "./pages/HomePage";
 import PostCard from "./reuseableComponents/PostCard";
 import SinglePost from "./pages/SinglePost";
+import EditPostPage from "./pages/EditPostPage";
 
 export {
   SignUpForm,
@@ -34,4 +35,5 @@ export {
   HomePage,
   PostCard,
   SinglePost,
+  EditPostPage,
 };

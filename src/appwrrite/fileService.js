@@ -39,9 +39,9 @@ class File {
       return false;
     }
   }
-  async deleteFile(fileId) {
+  async deleteImage(fileId) {
     try {
-      const deletedFile = await this.database.updateDocument(
+      const deletedFile = await this.storage.deleteFile(
         envImport.appwriteBucketId,
         fileId
       );

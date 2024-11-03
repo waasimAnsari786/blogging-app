@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import postService from "../appwrrite/postService";
 
 const initialState = {
+  filteredPost: {},
   postsArr: [],
   loading: false,
   error: null,
@@ -50,7 +51,12 @@ const postSlice = createSlice({
   name: "post",
   initialState,
   reducers: {
-    postÜpdated: () => {},
+    postFilter: (state, action) => {
+      let getedPost = state.postsArr.find(
+        (post) => post.slug === action.payload
+      );
+      state.filteredPost = getedPost;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -93,4 +99,4 @@ const postSlice = createSlice({
 });
 
 export default postSlice.reducer;
-export const { postÜpdated, getSinglePost, postdeleted } = postSlice.actions;
+export const { postFilter } = postSlice.actions;

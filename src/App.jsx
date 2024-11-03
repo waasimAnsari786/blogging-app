@@ -7,6 +7,7 @@ import {
   AuthProtectedLayout,
   HomePage,
   SinglePost,
+  EditPostPage,
 } from "./components/index";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Provider } from "react-redux";
@@ -23,7 +24,7 @@ function App() {
           element: <HomePage />,
         },
         {
-          path: "login",
+          path: "/login",
           element: (
             <AuthProtectedLayout authentication={false}>
               <LoginFrom />
@@ -31,7 +32,7 @@ function App() {
           ),
         },
         {
-          path: "signup",
+          path: "/signup",
           element: (
             <AuthProtectedLayout authentication={false}>
               <SignUpForm />
@@ -39,7 +40,7 @@ function App() {
           ),
         },
         {
-          path: "add-post",
+          path: "/add-post",
           element: (
             <AuthProtectedLayout authentication>
               <PostForm />
@@ -47,7 +48,7 @@ function App() {
           ),
         },
         {
-          path: "all-posts",
+          path: "/all-posts",
           element: (
             <AuthProtectedLayout authentication>
               <HomePage />
@@ -55,18 +56,26 @@ function App() {
           ),
         },
         {
-          path: "post/:slug",
+          path: "/post/:slug",
           element: (
             <AuthProtectedLayout authentication>
               <SinglePost />
             </AuthProtectedLayout>
           ),
         },
+        // {
+        //   path: "/all-posts/post/:slug",
+        //   element: (
+        //     <AuthProtectedLayout authentication>
+        //       <SinglePost />
+        //     </AuthProtectedLayout>
+        //   ),
+        // },
         {
-          path: "all-posts/post/:slug",
+          path: "/edit-post/:slug",
           element: (
             <AuthProtectedLayout authentication>
-              <SinglePost />
+              <EditPostPage />
             </AuthProtectedLayout>
           ),
         },
