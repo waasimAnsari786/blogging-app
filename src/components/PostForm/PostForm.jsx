@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect } from "react";
-import { Button, Container, Input, RTE, Select } from "../index";
+import { Button, Container, Input, Loader, RTE, Select } from "../index";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { createPostThunk, updatePostThunk } from "../../features/postSlice";
@@ -20,8 +20,8 @@ export default function PostForm({ post }) {
     });
 
   const { preview_URL_Arr } = useSelector((state) => state.file);
-
   const userData = useSelector((state) => state.auth.userData);
+  const { loading } = useSelector((state) => state.post);
 
   const slugTransform = useCallback(
     (value) => {
@@ -50,7 +50,7 @@ export default function PostForm({ post }) {
 
   const postSubmit = async (data) => {
     if (post) {
-      if (data.blogImage.files) {
+      if (typeof data.blogImage === "object") {
         const fileArr = await dispatch(
           fileUploadThunk(data.blogImage[0])
         ).unwrap();
@@ -65,24 +65,6 @@ export default function PostForm({ post }) {
       if (updatedPost) {
         navigate(`/post/${updatedPost[0].slug}`);
       }
-
-      // const fileArr = await dispatch(
-      //   fileUploadThunk(data.blogImage[0])
-      // ).unwrap();
-      // if (fileArr) {
-      //   data.blogImage = fileArr[1].$id;
-      //   const fileDeleted = await dispatch(
-      //     deleteUploadThunk(post.blogImage)
-      //   ).unwrap();
-      //   if (fileDeleted) {
-      //     const updatedPost = await dispatch(
-      //       updatePostThunk({ docID: post.$id, updatedObj: data })
-      //     ).unwrap();
-      //     if (updatedPost) {
-      //       navigate(`/post/${updatedPost[0].slug}`);
-      //     }
-      //   }
-      // }
     } else {
       const fileArr = await dispatch(
         fileUploadThunk(data.blogImage[0])
@@ -103,7 +85,9 @@ export default function PostForm({ post }) {
     }
   };
 
-  return (
+  return loading ? (
+    <Loader />
+  ) : (
     <Container>
       <form onSubmit={handleSubmit(postSubmit)}>
         <Input

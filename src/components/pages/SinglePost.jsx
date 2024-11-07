@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Button, Container, MyTypoGraphy } from "../index";
+import { Button, Container, MyTypoGraphy, Loader } from "../index";
 import { useNavigate, useParams, NavLink } from "react-router-dom";
 import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";

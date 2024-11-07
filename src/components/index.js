@@ -16,6 +16,7 @@ import HomePage from "./pages/HomePage";
 import PostCard from "./reuseableComponents/PostCard";
 import SinglePost from "./pages/SinglePost";
 import EditPostPage from "./pages/EditPostPage";
+import Loader from "./reuseableComponents/Loader";
 
 export {
   SignUpForm,
@@ -36,4 +37,5 @@ export {
   PostCard,
   SinglePost,
   EditPostPage,
+  Loader,
 };

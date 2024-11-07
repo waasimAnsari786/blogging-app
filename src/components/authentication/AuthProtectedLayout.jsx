@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { Loader } from "../index";
 
 export default function AuthProtectedLayout({
   children,
@@ -21,7 +22,7 @@ export default function AuthProtectedLayout({
 
   return loader ? (
     <>
-      <p>loading...</p>
+      <Loader />
     </>
   ) : (
     <>{children}</>

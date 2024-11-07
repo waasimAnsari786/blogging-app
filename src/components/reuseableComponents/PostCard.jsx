@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import parse from "html-react-parser";
 import { MyTypoGraphy } from "../index";
 import { useDispatch, useSelector } from "react-redux";
 import { getAllImagesThunk } from "../../features/fileSlice";
 
-export default function PostCard({ myClass = "", post, updatedDate }) {
+export default function PostCard({ myClass = "", post }) {
   const { title, shortDescription, status, blogImage, $createdAt, $updatedAt } =
     post;
   let date = new Date($createdAt);
@@ -33,9 +33,7 @@ export default function PostCard({ myClass = "", post, updatedDate }) {
       <MyTypoGraphy myClass="text-xl">
         Post Date: {date.toLocaleDateString()} at {date.toLocaleTimeString()}
       </MyTypoGraphy>
-      {updatedDate && (
-        <MyTypoGraphy myClass="text-xl">Update Date: {$updatedAt}</MyTypoGraphy>
-      )}
+      <MyTypoGraphy myClass="text-xl">Update Date: {$updatedAt}</MyTypoGraphy>
     </div>
   );
 }

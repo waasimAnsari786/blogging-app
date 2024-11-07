@@ -4,7 +4,7 @@ import postService from "../appwrrite/postService";
 const initialState = {
   filteredPost: {},
   postsArr: [],
-  loading: false,
+  loading: true,
   error: null,
 };
 

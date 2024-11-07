@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Container, PostCard } from "../index";
+import React, { useEffect, useState } from "react";
+import { Container, Loader, PostCard } from "../index";
 import { useDispatch, useSelector } from "react-redux";
 import { getPostsThunk } from "../../features/postSlice";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ export default function HomePage() {
   }, []);
 
   if (authstatus) {
-    if (postsArr.length === 0) {
+    if (postsArr && postsArr.length === 0) {
       return (
         <div className="text-center">
           <p>No posts are availbale to show</p>
