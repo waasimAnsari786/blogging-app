@@ -37,10 +37,27 @@ export const getPostsThunk = createAsyncThunk(
 
 export const deletePostThunk = createAsyncThunk(
   "post/deletePost",
-  async (slug, { rejectWithValue }) => {
+  async (docID, { rejectWithValue }) => {
     try {
-      const deletedPost = await postService.deletePost(slug);
+      const deletedPost = await postService.deletePost(docID);
       return deletedPost;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updatePostThunk = createAsyncThunk(
+  "post/updatePost",
+  async (postdata, { rejectWithValue }) => {
+    try {
+      const updatedPost = await postService.updatePost(postdata);
+      if (updatedPost) {
+        const getedPosts = await postService.getPosts();
+        if (getedPosts) {
+          return [updatedPost, getedPosts];
+        }
+      }
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -92,6 +109,18 @@ const postSlice = createSlice({
         state.loading = false;
       })
       .addCase(deletePostThunk.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updatePostThunk.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updatePostThunk.fulfilled, (state, action) => {
+        state.loading = false;
+        state.postsArr = action.payload[1].documents;
+      })
+      .addCase(updatePostThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });

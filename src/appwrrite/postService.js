@@ -16,7 +16,7 @@ class Post {
       const createdPost = await this.database.createDocument(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
-        post.slug,
+        ID.unique(),
         { ...post }
       );
       return createdPost;
@@ -26,12 +26,12 @@ class Post {
     }
   }
 
-  async getPost(slug) {
+  async getPost(docID) {
     try {
       const getedPost = await this.database.getDocument(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
-        slug
+        docID
       );
       return getedPost;
     } catch (error) {
@@ -45,8 +45,8 @@ class Post {
       const updatedPost = await this.database.updateDocument(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
-        post.slug,
-        { ...post }
+        post.docID,
+        { ...post.updatedObj }
       );
       return updatedPost;
     } catch (error) {
@@ -54,12 +54,12 @@ class Post {
       return false;
     }
   }
-  async deletePost(slug) {
+  async deletePost(docID) {
     try {
       const deletedPost = await this.database.deleteDocument(
         envImport.appwriteDatabaseId,
         envImport.appwriteCollectionId,
-        slug
+        docID
       );
       return deletedPost;
     } catch (error) {

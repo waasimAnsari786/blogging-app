@@ -2,19 +2,23 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import fileService from "../appwrrite/fileService";
 
 const initialState = {
-  preview_URL: "",
+  fileObj: "",
+  preview_URL_Arr: [],
   loading: true,
   error: null,
 };
 
 const fileUploadThunk = createAsyncThunk(
   "file/fileUpload",
-  async (file, { rejectWithValue }) => {
+  async (file, { rejectWithValue, dispatch }) => {
     try {
       const uploadedFile = await fileService.uploadFile(file);
-      return uploadedFile;
+      if (uploadedFile) {
+        const previewArr = await dispatch(getAllImagesThunk()).unwrap();
+        return [previewArr, uploadedFile];
+      }
     } catch (error) {
-      return rejectWithValue(error.messsage);
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -23,20 +27,28 @@ const deleteUploadThunk = createAsyncThunk(
   "file/fileDelete",
   async (fileId, { rejectWithValue }) => {
     try {
-      await fileService.deleteImage(fileId);
-      return "";
+      const fileDeleted = await fileService.deleteImage(fileId);
+      if (fileDeleted) return true;
     } catch (error) {
       return rejectWithValue(error.messsage);
     }
   }
 );
 
-const getImagePreviewThunk = createAsyncThunk(
-  "file/getImagePreview",
-  (fileId, { rejectWithValue }) => {
+const getAllImagesThunk = createAsyncThunk(
+  "file/getImages",
+  async (_, { rejectWithValue }) => {
     try {
-      const imagePreview = fileService.getPreviewFile(fileId);
-      return imagePreview;
+      const getAllImagesObj = await fileService.getAllFiles();
+      if (getAllImagesObj) {
+        const previewArr = getAllImagesObj.files.map((preview) => {
+          return {
+            URL: fileService.getPreviewFile(preview.$id),
+            fileId: preview.$id,
+          };
+        });
+        return previewArr;
+      }
     } catch (error) {
       return rejectWithValue(error.messsage);
     }
@@ -46,6 +58,7 @@ const getImagePreviewThunk = createAsyncThunk(
 const fileSlice = createSlice({
   name: "file",
   initialState,
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fileUploadThunk.pending, (state) => {
@@ -54,7 +67,8 @@ const fileSlice = createSlice({
       })
       .addCase(fileUploadThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.preview_URL = action.payload;
+        state.fileObj = action.payload[1];
+        state.preview_URL_Arr = action.payload[0];
       })
       .addCase(fileUploadThunk.rejected, (state, action) => {
         state.loading = false;
@@ -72,15 +86,15 @@ const fileSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      .addCase(getImagePreviewThunk.pending, (state) => {
+      .addCase(getAllImagesThunk.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(getImagePreviewThunk.fulfilled, (state, action) => {
+      .addCase(getAllImagesThunk.fulfilled, (state, action) => {
         state.loading = false;
-        state.preview_URL = action.payload;
+        state.preview_URL_Arr = action.payload;
       })
-      .addCase(getImagePreviewThunk.rejected, (state, action) => {
+      .addCase(getAllImagesThunk.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       });
@@ -88,4 +102,4 @@ const fileSlice = createSlice({
 });
 
 export default fileSlice.reducer;
-export { fileUploadThunk, deleteUploadThunk, getImagePreviewThunk };
+export { fileUploadThunk, deleteUploadThunk, getAllImagesThunk };

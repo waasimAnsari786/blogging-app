@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { postFilter } from "../../features/postSlice";
 
-export default function EditPostPage({ post }) {
+export default function EditPostPage() {
   const dispatch = useDispatch();
   const { slug } = useParams();
   const filteredPost = useSelector((state) => state.post.filteredPost);

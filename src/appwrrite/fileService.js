@@ -47,7 +47,17 @@ class File {
       );
       return deletedFile;
     } catch (error) {
-      console.log("appwrite error :: update post error :: " + error.message);
+      console.log("appwrite error :: delete file error :: " + error.message);
+      return false;
+    }
+  }
+
+  async getAllFiles() {
+    try {
+      const filesArr = await this.storage.listFiles(envImport.appwriteBucketId);
+      return filesArr;
+    } catch (error) {
+      console.log("appwrite error :: get files error :: " + error.message);
       return false;
     }
   }
