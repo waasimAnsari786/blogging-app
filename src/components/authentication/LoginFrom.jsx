@@ -6,9 +6,14 @@ import { useForm } from "react-hook-form";
 import auth from "../../appwrrite/authService";
 import { login } from "../../features/authSlice";
 import { AiOutlineMail } from "react-icons/ai";
+import { toast, Bounce } from "react-toastify";
 
 export default function LoginFrom() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -17,9 +22,12 @@ export default function LoginFrom() {
     if (userAccount) {
       const getUser = await auth.getCurrentUser();
       if (getUser) {
+        toast.success("Login Successfully!");
         dispatch(login(userAccount));
         navigate("/");
       }
+    } else {
+      toast.error("Failed to login. Try again!");
     }
   };
 
@@ -30,7 +38,7 @@ export default function LoginFrom() {
           label="email :"
           placeholder="your email"
           {...register("email", {
-            required: true,
+            required: "Email is required",
             validate: {
               pattern: (value) =>
                 /^[a-zA-Z0-9]+(?:[._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:-[a-zA-Z\d]+)*\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/.test(
@@ -44,16 +52,21 @@ export default function LoginFrom() {
               <AiOutlineMail />
             </>
           }
+          error={errors.email && errors.email.message}
         />
 
         <Input
           label="password :"
           placeholder="your password"
           {...register("password", {
-            required: true,
-            minLength: 8 || alert("Password should at least 8 characters"),
+            required: "Password is reuired",
+            minLength: {
+              value: 8,
+              message: "Password should at least 8 characters",
+            },
           })}
           type="password"
+          error={errors.password && errors.password.message}
         />
 
         <Button myClass="text-white">login</Button>

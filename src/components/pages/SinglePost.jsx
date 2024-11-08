@@ -5,6 +5,7 @@ import parse from "html-react-parser";
 import { useDispatch, useSelector } from "react-redux";
 import { deletePostThunk, postFilter } from "../../features/postSlice";
 import { deleteUploadThunk } from "../../features/fileSlice";
+import { toast } from "react-toastify";
 
 export default function SinglePost() {
   const dispatch = useDispatch();
@@ -23,14 +24,18 @@ export default function SinglePost() {
 
   const { preview_URL_Arr } = useSelector((state) => state.file);
 
-  const deletePost = () => {
+  const deletePost = async () => {
     dispatch(deletePostThunk(filteredPost.$id))
       .unwrap()
       .then(() => {
         dispatch(deleteUploadThunk(filteredPost.blogImage));
+        toast.success("Post deleted succesfully");
         navigate("/all-posts");
       })
-      .catch((error) => console.log(error.message));
+      .catch((error) => {
+        console.log(error.message);
+        toast.error("Failed to delete post!");
+      });
   };
 
   return (

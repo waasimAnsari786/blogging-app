@@ -5,19 +5,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { createPostThunk, updatePostThunk } from "../../features/postSlice";
 import { useNavigate } from "react-router-dom";
 import { fileUploadThunk, deleteUploadThunk } from "../../features/fileSlice";
+import { toast } from "react-toastify";
 
 export default function PostForm({ post }) {
-  const { handleSubmit, register, watch, setValue, control, getValues } =
-    useForm({
-      defaultValues: {
-        title: post?.title || "",
-        shortDescription: post?.shortDescription || "",
-        longDescription: post?.longDescription || "",
-        slug: post?.slug || "",
-        status: post?.status || "active",
-        blogImage: post?.blogImage || "",
-      },
-    });
+  const {
+    handleSubmit,
+    register,
+    watch,
+    setValue,
+    control,
+    getValues,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: post?.title || "",
+      shortDescription: post?.shortDescription || "",
+      longDescription: post?.longDescription || "",
+      slug: post?.slug || "",
+      status: post?.status || "active",
+      blogImage: post?.blogImage || "",
+    },
+  });
 
   const { preview_URL_Arr } = useSelector((state) => state.file);
   const userData = useSelector((state) => state.auth.userData);
@@ -49,6 +57,9 @@ export default function PostForm({ post }) {
   const navigate = useNavigate();
 
   const postSubmit = async (data) => {
+    Object.keys(data).forEach((key) => {
+      console.log(data[key]);
+    });
     if (post) {
       if (typeof data.blogImage === "object") {
         const fileArr = await dispatch(
@@ -63,7 +74,10 @@ export default function PostForm({ post }) {
         updatePostThunk({ docID: post.$id, updatedObj: data })
       ).unwrap();
       if (updatedPost) {
+        toast.success("Post updated successfully!");
         navigate(`/post/${updatedPost[0].slug}`);
+      } else {
+        toast.error("Falied to update Post!");
       }
     } else {
       const fileArr = await dispatch(
@@ -75,57 +89,63 @@ export default function PostForm({ post }) {
           createPostThunk({ ...data, userId: userData.$id })
         ).unwrap();
         if (createdPost) {
+          toast.success("Post created successfully!");
           navigate(
             `/post/${
               createdPost.documents[createdPost.documents.length - 1].slug
             }`
           );
+        } else {
+          toast.error("Failed to create post!");
         }
       }
     }
   };
 
-  return loading ? (
-    <Loader />
-  ) : (
+  return (
     <Container>
       <form onSubmit={handleSubmit(postSubmit)}>
         <Input
-          {...register("title", { required: true })}
+          {...register("title", { required: "Title is required" })}
           label="title"
           placeholder="blog title"
+          error={errors.title && errors.title.message}
         />
         <Input
-          {...register("slug", { required: true })}
+          {...register("slug", { required: "Slug is required" })}
           label="slug"
           placeholder="blog slug"
           readOnly
+          error={errors.slug && errors.slug.message}
         />
 
         <RTE
           name="shortDescription"
-          label="shortDescription"
+          label="Short Description"
           control={control}
           defaultValue={getValues("shortDescription")}
         />
         <RTE
           name="longDescription"
-          label="longDescription"
+          label="Long Description"
           control={control}
           defaultValue={getValues("longDescription")}
         />
 
         <Input
-          {...register("blogImage", { required: !post ? true : false })}
+          {...register("blogImage", {
+            required: !post ? "Image is Required" : false,
+          })}
           label="blog image"
           type="file"
+          error={errors.blogImage && errors.blogImage.message}
         />
 
         <Select
           options={["active", "inactive"]}
           label="blog status"
-          s
-          {...register("status", { required: true })}
+          {...register("status", { required: "Status is required" })}
+          error={errors.status && errors.status.message}
         />
 
         {post &&
@@ -141,6 +161,11 @@ export default function PostForm({ post }) {
               alt={`${post.title}'s image`}
             />
           )}
+
+        {/* {errors.title && toast.error(errors.title.message)} */}
+        {/* {errors.blogImage && toast.error(errors.blogImage.message)}
+        {errors.slug && toast.error(errors.slug.message)}
+        {errors.status && toast.error(errors.status.message)} */}
 
         <Button myClass="text-white">{post ? "Update" : "Submit"}</Button>
       </form>

@@ -5,9 +5,14 @@ import auth from "../../appwrrite/authService";
 import { useDispatch } from "react-redux";
 import { login } from "../../features/authSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function SignUpForm() {
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,8 +23,11 @@ export default function SignUpForm() {
 
       if (getUser) {
         dispatch(login(userAccount));
+        toast.success("Signup Successfully!");
         navigate("/");
       }
+    } else {
+      toast.error("Failed to Signup. Try again!");
     }
   };
 
@@ -30,15 +38,18 @@ export default function SignUpForm() {
           label="name :"
           placeholder="your name"
           {...register("name", {
-            required: true,
-            minLength: 3,
+            required: "Name is required",
+            minLength: {
+              value: 3,
+              message: "Name must contain at least 3 characters",
+            },
           })}
         />
         <Input
           label="email :"
           placeholder="your email"
           {...register("email", {
-            required: true,
+            required: "Email is required",
             validate: {
               pattern: (value) =>
                 /^[a-zA-Z0-9]+(?:[._%+-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+(?:-[a-zA-Z\d]+)*\.[a-zA-Z]{2,}(?:\.[a-zA-Z]{2,})?$/.test(
@@ -53,13 +64,20 @@ export default function SignUpForm() {
           label="password :"
           placeholder="your password"
           {...register("password", {
-            required: true,
-            minLength: 8 || alert("Password should at least 8 characters"),
+            required: "Password is required",
+            minLength: {
+              value: 8,
+              message: "Password should at least 8 characters",
+            },
           })}
           type="password"
         />
 
         <Button myClass="text-white">signup</Button>
+
+        {errors.name && toast.error(errors.name.message)}
+        {errors.email && toast.error(errors.email.message)}
+        {errors.password && toast.error(errors.password.message)}
       </form>
     </Container>
   );

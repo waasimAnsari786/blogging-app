@@ -1,7 +1,11 @@
 import React, { forwardRef, useId } from "react";
+import { toast } from "react-toastify";
 
 const Input = forwardRef(
-  ({ type = "text", inpClass = "", label, icon = "", ...props }, ref) => {
+  (
+    { type = "text", inpClass = "", label, icon = "", error, ...props },
+    ref
+  ) => {
     const id = useId();
     return (
       <div>
@@ -16,6 +20,7 @@ const Input = forwardRef(
           />
           {icon}
         </div>
+        {error && toast.error(error)}
       </div>
     );
   }
