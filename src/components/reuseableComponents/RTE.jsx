@@ -6,9 +6,7 @@ import { toast } from "react-toastify";
 export default function RTE({ name, control, label, defaultValue = "" }) {
   return (
     <div className="w-full">
-      <label htmlFor={name} className="text-white">
-        {label}
-      </label>
+      <label htmlFor={name}>{label}</label>
       <Controller
         name={name}
         rules={{ required: `${label} is required` }}

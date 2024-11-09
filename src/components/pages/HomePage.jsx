@@ -23,7 +23,7 @@ export default function HomePage() {
     } else {
       return (
         <>
-          <Container childElemClass="grid grid-cols-3">
+          <Container childElemClass="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 pt-20">
             {postsArr.map((post) => (
               <Link to={`/post/${post.slug}`} key={post.$id}>
                 <PostCard post={post} />

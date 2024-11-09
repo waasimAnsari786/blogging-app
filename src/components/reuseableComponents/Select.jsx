@@ -3,7 +3,7 @@ import React, { forwardRef, useId } from "react";
 const Select = ({ options = [], label, props, error }, ref) => {
   const id = useId();
   return (
-    <div>
+    <div className="w-full">
       <label htmlFor={id}>{label}</label>
       <div className="flex justify-between">
         <select id={id} ref={ref} {...props}>

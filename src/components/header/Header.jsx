@@ -1,18 +1,23 @@
-import React, { useId, useEffect } from "react";
+import React, { useId, useEffect, useState } from "react";
 import { Container, LogoutBtn } from "../index";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import auth from "../../appwrrite/authService";
 import { login } from "../../features/authSlice";
+import { HiOutlineMenu, HiX } from "react-icons/hi";
+import { FaGithub, FaLinkedin } from "react-icons/fa"; // Icons for GitHub and LinkedIn
 
 export default function Header() {
   const dispatch = useDispatch();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State for mobile menu
+
   const fetchUser = async () => {
     const isLogedIn = await auth.getCurrentUser();
     if (isLogedIn) {
       dispatch(login(isLogedIn));
     }
   };
+
   useEffect(() => {
     fetchUser();
   }, []);
@@ -28,24 +33,113 @@ export default function Header() {
   ];
 
   return (
-    <Container childElemClass="flex justify-between">
-      <div className="w-16">
-        <p className="text-3xl">logo</p>
-      </div>
-      <div className="w-1/2">
-        <nav>
-          <ul className="flex gap-2">
-            {navItems.map((item) =>
-              item.active ? (
-                <li key={item.id}>
-                  <NavLink to={item.slug}>{item.name}</NavLink>
-                </li>
-              ) : null
-            )}
-            {authStatus && <LogoutBtn />}
-          </ul>
-        </nav>
-      </div>
-    </Container>
+    <header className="w-full bg-customPurple">
+      <Container childElemClass="flex justify-between items-center">
+        {/* Logo Div, hidden when mobile menu is open */}
+        {!isMobileMenuOpen && (
+          <div className="w-[20%] md:w-[11%] rounded-md p-2">
+            <img
+              src="/logo/wa blogging logo.png"
+              alt="logo"
+              className="w-full"
+            />
+          </div>
+        )}
+
+        {/* Mobile Menu Button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="text-white text-3xl"
+          >
+            {isMobileMenuOpen ? <HiX /> : <HiOutlineMenu />}
+          </button>
+        </div>
+
+        {/* Desktop and Mobile Navigation */}
+        <div
+          className={`${
+            isMobileMenuOpen ? "translate-x-0" : "translate-x-full"
+          } fixed md:static top-0 right-0 md:flex md:translate-x-0 w-2/3 md:w-auto h-screen md:h-auto bg-gray-800 md:bg-transparent transition-transform duration-300 ease-in-out`}
+        >
+          {/* Mobile Menu Header with centered items */}
+          {isMobileMenuOpen && (
+            <div className="flex flex-col items-center justify-center h-full py-4">
+              {/* Logo at the bottom of the mobile menu */}
+              <div className="w-[30%] bg-customPurple rounded-md">
+                <img src="/logo/FullLogo.png" alt="logo" className="w-full" />
+              </div>
+
+              {/* Navigation Items */}
+              <nav>
+                <ul className="flex flex-col items-center gap-4">
+                  {navItems.map(
+                    (item) =>
+                      item.active && (
+                        <li key={item.id}>
+                          <NavLink
+                            to={item.slug}
+                            className="text-white hover:text-gray-300 transition duration-200"
+                            onClick={() => setIsMobileMenuOpen(false)} // Close menu on link click in mobile
+                          >
+                            {item.name}
+                          </NavLink>
+                        </li>
+                      )
+                  )}
+                  {authStatus && <LogoutBtn />}
+                </ul>
+              </nav>
+
+              {/* Social Icons */}
+              <div className="flex gap-4 mb-4">
+                <Link to="/github" className="text-white text-xl">
+                  <FaGithub />
+                </Link>
+                <Link to="/linkedin" className="text-white text-xl">
+                  <FaLinkedin />
+                </Link>
+              </div>
+            </div>
+          )}
+
+          {/* Navigation Items */}
+          {!isMobileMenuOpen && (
+            <nav>
+              <ul className="flex items-center gap-4">
+                {navItems.map(
+                  (item) =>
+                    item.active && (
+                      <li key={item.id}>
+                        <NavLink
+                          to={item.slug}
+                          className={({ isActive }) =>
+                            `text-white transition duration-300 px-2 py-1 rounded-lg ${
+                              isActive
+                                ? "bg-white text-customPurple"
+                                : "hover:text-customPurple hover:bg-white"
+                            }`
+                          }
+                          onClick={() => {
+                            setIsMobileMenuOpen(false);
+                            document.title = `Blogging App - ${
+                              item.slug === "/"
+                                ? "Home"
+                                : item.slug.split("/").join("")
+                            }`;
+                          }} // Close menu on link click in mobile
+                        >
+                          {item.name}
+                        </NavLink>
+                      </li>
+                    )
+                )}
+                {authStatus && <LogoutBtn />}
+              </ul>
+            </nav>
+          )}
+        </div>
+      </Container>
+    </header>
   );
 }

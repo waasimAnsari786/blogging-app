@@ -65,14 +65,7 @@ function App() {
             </AuthProtectedLayout>
           ),
         },
-        // {
-        //   path: "/all-posts/post/:slug",
-        //   element: (
-        //     <AuthProtectedLayout authentication>
-        //       <SinglePost />
-        //     </AuthProtectedLayout>
-        //   ),
-        // },
+
         {
           path: "/edit-post/:slug",
           element: (
