@@ -82,7 +82,7 @@ export default function Header() {
                             className={({ isActive }) =>
                               `text-white transition duration-300 px-2 py-1 rounded-lg ${
                                 isActive
-                                  ? "bg-white text-customPurple"
+                                  ? "bg-white text-slate-950"
                                   : "hover:text-customPurple hover:bg-white"
                               }`
                             }
@@ -135,7 +135,7 @@ export default function Header() {
                           className={({ isActive }) =>
                             `text-white transition duration-300 px-2 py-1 rounded-lg ${
                               isActive
-                                ? "bg-white text-black"
+                                ? "bg-white text-slate-950"
                                 : "hover:text-customPurple hover:bg-white"
                             }`
                           }
