@@ -1,7 +1,11 @@
-import React, { forwardRef, useId } from "react";
+import React, { forwardRef, useEffect, useId } from "react";
+import { toast } from "react-toastify";
 
 const Select = ({ options = [], label, props, error }, ref) => {
   const id = useId();
+  useEffect(() => {
+    error && toast.error(error);
+  }, [error]);
   return (
     <div className="w-full">
       <label htmlFor={id}>{label}</label>
@@ -14,7 +18,6 @@ const Select = ({ options = [], label, props, error }, ref) => {
           ))}
         </select>
       </div>
-      {error && toast.error(error)}
     </div>
   );
 };

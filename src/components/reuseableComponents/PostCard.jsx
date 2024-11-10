@@ -18,7 +18,7 @@ export default function PostCard({ myClass = "", post }) {
 
   return (
     <div
-      className={`${myClass} shadow-lg shadow-gray-500 rounded-xl relative sm:h-[25rem] flex flex-col justify-between`}
+      className={`${myClass} shadow-lg shadow-gray-500 rounded-xl relative h-[25rem] flex flex-col justify-between`}
     >
       {preview_URL_Arr.some((preview) => preview.fileId === blogImage) && (
         <img

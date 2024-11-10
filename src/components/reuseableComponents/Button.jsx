@@ -2,8 +2,8 @@ import React from "react";
 
 export default function Button({
   children,
-  bgColor = "bg-gray-500",
-  textColor = "text-black",
+  bgColor = "bg-customPurple",
+  textColor = "text-white",
   padding = "",
   myClass = "",
   ...props
